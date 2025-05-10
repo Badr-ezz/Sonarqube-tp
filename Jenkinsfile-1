@@ -1,20 +1,15 @@
 pipeline {
-     agent {
-        label 'windows' // Specify a Windows agent label
-    }
+    agent any
     environment {
-        JAVA_HOME = 'C:\\Program Files\\Java\\jdk-22'
-        PATH = "${env.JAVA_HOME}\\bin;${env.PATH}"
-    }
-    options {
-        buildDiscarder(logRotator(numToKeepStr: '5'))
+        JAVA_HOME = '/opt/java/openjdk'  // Updated path from container inspection
+        PATH = "${env.JAVA_HOME}/bin:${env.PATH}"
     }
     stages {
         stage('Scan') {
             steps {
                 script {
                     withSonarQubeEnv('Sq1') {
-                        bat 'mvnw.cmd clean org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.0.2155:sonar -Dsonar.projectKey=sonarQube_tp'
+                        sh './mvnw clean org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.0.2155:sonar -Dsonar.projectKey=sonarQube_tp'
                     }
                 }
             }
