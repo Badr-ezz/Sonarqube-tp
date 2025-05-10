@@ -1,5 +1,7 @@
 pipeline {
-    agent any
+     agent {
+        label 'windows' // Specify a Windows agent label
+    }
     environment {
         JAVA_HOME = 'C:\\Program Files\\Java\\jdk-22'
         PATH = "${env.JAVA_HOME}\\bin;${env.PATH}"
