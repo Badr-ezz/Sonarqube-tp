@@ -2,12 +2,18 @@ pipeline {
     agent any
     
     environment {
-        // Directly use the confirmed JDK 17 path
         JAVA_HOME = '/opt/java/openjdk'
         PATH = "${env.JAVA_HOME}/bin:${env.PATH}"
     }
 
     stages {
+        stage('Fix Permissions') {
+            steps {
+                sh 'chmod +x mvnw'  // Grant execute permission
+                sh 'ls -la mvnw'    // Verify permissions (-rwxr-xr-x)
+            }
+        }
+        
         stage('Verify Setup') {
             steps {
                 sh '''
@@ -18,7 +24,7 @@ pipeline {
             }
         }
         
-        stage('Build & SonarQube Scan') {
+        stage('Build & Scan') {
             steps {
                 script {
                     withSonarQubeEnv('Sq1') {
